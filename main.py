@@ -22,7 +22,7 @@ def scan_port(target, port): #Function to scan 1 port
     s.close()
     return port, result
 
-def scan_ports(target, first_port, last_port):#Allow to scan multi-port in parallele
+def scan_ports(target, first_port, last_port):#Allow to scan multiples ports in parallele
     with ThreadPoolExecutor(max_workers=100) as executor:
         ports = range(first_port, last_port + 1)
         futures = [executor.submit(scan_port, target, port) for port in ports]
