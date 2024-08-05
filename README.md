@@ -23,10 +23,15 @@ This project is a Python script that allows you to scan the ports of a specified
 
 ### Usage Steps    
 
-1. Run the script  
-2. Enter the IPv4 Address you want to scan  
-3. Enter first port to scan  
-4. Enter last port to scan  
+Open the Terminal
+```sh
+$ cd Ports_scanner_Python
+$ python3 main.py
+```
+
+1. Enter the IPv4 Address you want to scan  
+2. Enter first port to scan  
+3. Enter last port to scan  
 
 ### Libraries Used  
 
@@ -35,5 +40,13 @@ This project is a Python script that allows you to scan the ports of a specified
 * os (https://docs.python.org/fr/3/library/os.html)  
 * concurrent.futures (https://docs.python.org/3/library/concurrent.futures.html)  
 
-#### Author  
+
+### OS
+
+Working on :
+* Windows
+* Linux
+* MAC
+
+### Author  
 S-Navjot
