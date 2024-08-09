@@ -48,7 +48,7 @@ Working on :
 * Linux
 * MAC
 
-## Versions
+### Versions
 
 V1 (3rd August 2024)
 --------------------
@@ -58,8 +58,15 @@ V1.1 (6th August 2024)
 --------------------
 - User can now select :
   - a single port (eg 22)
-  - a range of ports (eg 100-200 (from 100 to 200))
-  - multiple ports (eg 22, 80, 100-200 (22, 80 and from 100 to 200))
+  - a range of ports (eg. 100-200 (from 100 to 200))
+  - multiple ports (eg. 22, 80, 100-200 (22, 80 and from 100 to 200))
 - User can't select a port lower than 1 or higher than 65535
 - User can now choose between scan ports or leave the program
+- Minor display updates 
+
+V1.2 (9th August 2024)
+--------------------
+- User can now select :
+  - multiple IPs (IPv4) and/or domains (eg. localhost, 1.1.1.122)
+- Add comments
 - Minor display updates 
