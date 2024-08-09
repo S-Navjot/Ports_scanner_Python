@@ -7,20 +7,30 @@ from concurrent.futures import ThreadPoolExecutor
 def clear_screen():
     os.system('cls' if os.name == 'nt' else 'clear')
 
+#Function allowing the user to enter the Ips/domains to be scanned
 def host_target():
-    user_input_ip = input("Enter an IP Address (IPv4) or Domain name: ")
-    try:
-        hostname = socket.gethostbyname(user_input_ip)
-        print(f"Target: {hostname}")
-        return hostname
-    except socket.gaierror as e:
-        print(f"Error: {e}. Please enter a valid IP address or domain name.")
-        return host_target()
-
+    while True:
+        user_input_ip = input("Enter an IP Address (IPv4) or Domain names (for multiple entries use ',' as separator (eg localhost, 1.1.1.1)) : ")
+        hosts = []
+        n = 1
+        hostnames = user_input_ip.split(",")
+        try:
+            for host in hostnames:
+                host = host.strip()              
+                new_host = socket.gethostbyname(host)
+                print(f"Target {n}: {new_host}")
+                n += 1
+                hosts.append(new_host)
+            print()
+            return hosts
+        except socket.gaierror as e:
+            print(f"Error: {e}. Please enter a valid IP address or domain name.")
+            return host_target()
+        
+#Function allowing the user to enter the port(s) to be scanned
 def get_ports_to_scan():
     while True:
         user_input = input("Enter ports to scan (e.g., 22, 80, 1000-2000): ")
-        print()
         ports = []
         ranges = user_input.split(',')
         try:
@@ -39,6 +49,8 @@ def get_ports_to_scan():
         except ValueError as e:
             print(f"Error: {e}. Please enter valid ports.")
 
+
+#Function that creates a socket and allows connection to the selected address and ports
 def scan_port(target, port):
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.settimeout(1)
@@ -46,24 +58,28 @@ def scan_port(target, port):
     s.close()
     return port, result
 
-def scan_ports(target, ports):
-    with ThreadPoolExecutor(max_workers=100) as executor:
-        futures = [executor.submit(scan_port, target, port) for port in ports]
-        for future in futures:
-            port, result = future.result()
-            if result == 0:
-                print(f'{target} : {port}/TCP is [open]')
+#ThreadPoolExecutor function to run up to 100 scans in parallel
+def scan_ports(targets, ports):
+    for target in targets:
+        with ThreadPoolExecutor(max_workers=100) as executor:
+            futures = [executor.submit(scan_port, target, port) for port in ports]
+            for future in futures:
+                port, result = future.result()
+                if result == 0:
+                    print(f'{target} : {port}/TCP is [open]')
+        print()
 
+#Function used to request for all information (ports, ip/domain) and time management
 def scanners():
     while True:
         clear_screen()
-        target = host_target()
-        if not target:
+        targets = host_target()
+        if not targets:
             continue
         ports = get_ports_to_scan()
         start = datetime.now()
         try:
-            scan_ports(target, ports)
+            scan_ports(targets, ports)
         except Exception as e:
             print(f"Error: {e}")
         end = datetime.now()
