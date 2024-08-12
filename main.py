@@ -1,7 +1,8 @@
 import socket
-from datetime import datetime
 import os
+from datetime import datetime
 from concurrent.futures import ThreadPoolExecutor
+from netaddr import *
 
 #Function to clear Terminal. Working on Windonws (cls) and MAC/Linux (clear)
 def clear_screen():
@@ -10,23 +11,31 @@ def clear_screen():
 #Function allowing the user to enter the Ips/domains to be scanned
 def host_target():
     while True:
-        user_input_ip = input("Enter an IP Address (IPv4) or Domain names (for multiple entries use ',' as separator (eg localhost, 1.1.1.1)) : ")
+        user_input_ip = input("Enter an IP Address (IPv4), IP range (e.g., 192.168.0.1-192.168.0.5), or Domain names (for multiple entries use ',' as separator (e.g., localhost, 1.1.1.1)) : ")
         hosts = []
         n = 1
         hostnames = user_input_ip.split(",")
         try:
             for host in hostnames:
-                host = host.strip()              
-                new_host = socket.gethostbyname(host)
-                print(f"Target {n}: {new_host}")
-                n += 1
-                hosts.append(new_host)
+                host = host.strip()
+                if "-" in host:  # Check if the user entered an IP range
+                    start_ip, end_ip = host.split("-")
+                    ip_range = list(IPRange(start_ip.strip(), end_ip.strip()))
+                    for ip in ip_range:
+                        hosts.append(str(ip))
+                        print(f"Target {n}: {ip}")
+                        n += 1
+                else:
+                    new_host = socket.gethostbyname(host)
+                    hosts.append(new_host)
+                    print(f"Target {n}: {new_host}")
+                    n += 1
             print()
             return hosts
         except socket.gaierror as e:
             print(f"Error: {e}. Please enter a valid IP address or domain name.")
             return host_target()
-        
+       
 #Function allowing the user to enter the port(s) to be scanned
 def get_ports_to_scan():
     while True:
@@ -53,7 +62,7 @@ def get_ports_to_scan():
 #Function that creates a socket and allows connection to the selected address and ports
 def scan_port(target, port):
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    s.settimeout(1)
+    s.settimeout(0.5)
     result = s.connect_ex((target, port))
     s.close()
     return port, result
@@ -83,7 +92,8 @@ def scanners():
         except Exception as e:
             print(f"Error: {e}")
         end = datetime.now()
-        print(f"\nScan duration: {end - start}")
+        duration = end - start
+        print(f"\nScan duration: {duration}")
         break
 
 if __name__ == '__main__':
