@@ -38,7 +38,8 @@ $ python3 main.py
 * socket (https://docs.python.org/3/library/datetime.html)  
 * datetime (https://docs.python.org/3/library/datetime.html)  
 * os (https://docs.python.org/fr/3/library/os.html)  
-* concurrent.futures (https://docs.python.org/3/library/concurrent.futures.html)  
+* concurrent.futures (https://docs.python.org/3/library/concurrent.futures.html)
+* netaddr (https://netaddr.readthedocs.io/en/latest/)
 
 
 ### OS
@@ -70,3 +71,8 @@ V1.2 (9th August 2024)
   - multiple IPs (IPv4) and/or domains (eg. localhost, 1.1.1.122)
 - Add comments
 - Minor display updates 
+
+V1.3 (12th August 2024)
+--------------------
+- User can now select :
+  - IP Range (eg. 1.1.1.1-1.1.1.10 : from 1.1.1.1 to 1.1.1.10)
