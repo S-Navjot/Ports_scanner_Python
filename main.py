@@ -12,7 +12,7 @@ def clear_screen():
 def host_target():
     while True:
         user_input_ip = input("Enter an IP Address (IPv4), IP range (e.g., 192.168.0.1-192.168.0.5), or Domain names (for multiple entries use ',' as separator (e.g., localhost, 1.1.1.1)) : ")
-        hosts = []
+        hosts_list = []
         n = 1
         hostnames = user_input_ip.split(",")
         try:
@@ -22,16 +22,16 @@ def host_target():
                     start_ip, end_ip = host.split("-")
                     ip_range = list(IPRange(start_ip.strip(), end_ip.strip()))
                     for ip in ip_range:
-                        hosts.append(str(ip))
+                        hosts_list.append(str(ip))
                         print(f"Target {n}: {ip}")
                         n += 1
                 else:
                     new_host = socket.gethostbyname(host)
-                    hosts.append(new_host)
+                    hosts_list.append(new_host)
                     print(f"Target {n}: {new_host}")
                     n += 1
             print()
-            return hosts
+            return hosts_list
         except socket.gaierror as e:
             print(f"Error: {e}. Please enter a valid IP address or domain name.")
             return host_target()
@@ -62,7 +62,7 @@ def get_ports_to_scan():
 #Function that creates a socket and allows connection to the selected address and ports
 def scan_port(target, port):
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    s.settimeout(0.5)
+    s.settimeout(1)
     result = s.connect_ex((target, port))
     s.close()
     return port, result
