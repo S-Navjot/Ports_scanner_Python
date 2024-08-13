@@ -77,7 +77,7 @@ V1.3 (12th August 2024)
 - User can now select :
   - IP Range (eg. 1.1.1.1-1.1.1.10 : from 1.1.1.1 to 1.1.1.10)
 
-V1.4 ()
+V1.4 (13th August 2024)
 --------------------
 - Script now display associated service name when port is open
   - If service name is not available, then "Unknown" is showed
