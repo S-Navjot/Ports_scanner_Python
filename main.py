@@ -75,9 +75,18 @@ def scan_ports(targets, ports):
             for future in futures:
                 port, result = future.result()
                 if result == 0:
-                    print(f'{target} : {port}/TCP is [open]')
+                    service = get_service_name(port)
+                    print(f'{target} : {port}/TCP is [open] - Service Name : {service}')                   
         print()
 
+def get_service_name(port):
+    try:
+        service = socket.getservbyport(port)
+        return service
+    except socket.error:
+        value = "Unknown"
+        return value
+        
 #Function used to request for all information (ports, ip/domain) and time management
 def scanners():
     while True:
